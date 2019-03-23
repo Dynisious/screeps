@@ -1,0 +1,13 @@
+{
+  "requires": true,
+  "dependencies": {},
+  "name": "screeps",
+  "devDependencies": {
+    "@types/node": "^11.11.6",
+    "@types/screeps": "^2.5.3"
+  },
+  "scripts": {
+    "clean": "rm -r ./dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
