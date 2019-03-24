@@ -1,30 +1,34 @@
 "use strict";
 (() => {
     const result = ({ v, e }) => ({
-        is_ok: () => typeof v !== 'undefined',
-        is_err: () => typeof e !== 'undefined',
+        is_ok: () => v === undefined,
+        is_err: () => e == undefined,
+        set_ok: (val) => {
+            v = val;
+            e = undefined;
+        },
+        set_err: (error) => {
+            v = undefined;
+            e = error;
+        },
         expect: (err_msg) => {
-            if (e !== undefined) {
+            if (e !== undefined)
                 throw 'called expect on err value: ' + err_msg + e.toString();
-            }
             return v;
         },
         expect_err: (err_msg) => {
-            if (v !== undefined) {
+            if (v !== undefined)
                 throw 'called expect_err on ok value: ' + err_msg + v.toString();
-            }
             return e;
         },
         unwrap: () => {
-            if (e !== undefined) {
+            if (e !== undefined)
                 throw 'called unwrap on err value: ' + e.toString();
-            }
             return v;
         },
         unwrap_err: () => {
-            if (v !== undefined) {
+            if (v !== undefined)
                 throw 'called unwrap_err on ok value: ' + v.toString();
-            }
             return e;
         },
         unwrap_or: (o) => v === undefined ? o : v,

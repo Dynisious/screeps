@@ -1,25 +1,33 @@
-  
+
 (() => {
 const result = <T, E>({ v, e }: { v?: T, e?: E }): Result<T, E> => ({
-  is_ok: () => typeof v !== 'undefined',
-  is_err: () => typeof e !== 'undefined',
+  is_ok: () => v === undefined,
+  is_err: () => e == undefined,
+  set_ok: (val: T) => {
+    v = val;
+    e = undefined;
+  },
+  set_err: (error: E) => {
+    v = undefined;
+    e = error;
+  },
   expect: (err_msg: string) => {
-      if (e !== undefined) { throw 'called expect on err value: ' + err_msg + e.toString(); }
-      
-      return v;
+    if (e !== undefined) throw 'called expect on err value: ' + err_msg + e.toString();
+    
+    return v;
   },
   expect_err: (err_msg: string) => {
-      if (v !== undefined) { throw 'called expect_err on ok value: ' + err_msg + v.toString(); }
+      if (v !== undefined) throw 'called expect_err on ok value: ' + err_msg + v.toString();
       
       return e;
   },
   unwrap: () => {
-      if (e !== undefined) { throw 'called unwrap on err value: ' + e.toString(); }
+      if (e !== undefined) throw 'called unwrap on err value: ' + e.toString();
       
       return v;
   },
   unwrap_err: () => {
-      if (v !== undefined) { throw 'called unwrap_err on ok value: ' + v.toString(); }
+      if (v !== undefined) throw 'called unwrap_err on ok value: ' + v.toString();
       
       return e;
   },
