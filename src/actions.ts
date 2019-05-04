@@ -1,18 +1,18 @@
 
 (() => {
-  const { ok } = require('result') as ResultExport;
+const { from_list, map, } = <ConsExport>require('utils/cons');
+const move_to = (creep: CreepExt) => (dest: RoomPosition): ConsList<MoveTo> => {
+  const for_step = (step: PathStep): MoveTo => {
+    const execute = (creep: CreepExt): MoveResult =>
+      (step.x === creep.pos.x && step.y === creep.pos.y)
+      ? creep.move(step.direction)
+      : ERR_INVALID_ARGS;
+
+    return { action: MOVE_TO, execute, }
+  };
   
-  const IDLE = { action: () => ACT_IDLE };
-  const idle = (): ActionIdle => IDLE;
-  const execute = (creep: CreepExt, action: Action): Result<null, number> => {
-    //ToDo
-    return ok(null);
-  };
-  const execute_creep = (creep: CreepExt): Result<null, number> => {
-    const action = creep.memory.actions.pop_front();
+  return map(from_list(creep.room.findPath(creep.pos, dest)), for_step);
+};
 
-    return action.match(action => execute(creep, action), _ => execute(creep, IDLE));
-  };
-
-  module.exports = { idle, execute, execute_creep };
+module.exports = <ActionsExport>{ move_to, };
 })();

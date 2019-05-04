@@ -3,7 +3,7 @@
   "dependencies": {},
   "name": "screeps",
   "devDependencies": {
-    "@types/node": "^11.11.6",
+    "@types/node": "^11.13.9",
     "@types/screeps": "^2.5.3"
   },
   "scripts": {

@@ -1,58 +1,38 @@
 
 /**
- * The default idle behaviour for all screeps.
+ * An action executed by a `Creep`.
  */
-declare const ACT_IDLE: 0;
-/**
- * The behaviour of following a path from one point to another.
- */
-declare const ACT_MOVING: 1;
-
-/**
- * An action object.
- */
-type Action = {
+declare interface Action {
   /**
-   * The identifier of what kind of action this is.
+   * The identifying number of this Action.
    */
-  action: () => number
-};
-/**
- * An Idle action object.
- */
-interface ActionIdle extends Action {}
-/**
- * A Moving action object.
- */
-interface ActionMoving extends Action {
+  readonly action: number;
   /**
-   * The path being followed.
+   * Executs this Action.
    */
-  path: Peekable<PathStep>
+  execute: (creep: CreepExt) => void;
 }
 
-interface ActionsExport {
+/**
+ * The identifier for a `MoveTo` action.
+ */
+declare const MOVE_TO: 1;
+/**
+ * The result of executing a `MoveTo` action.
+ */
+declare type MoveResult = OK | ERR_NOT_OWNER | ERR_BUSY | ERR_TIRED | ERR_NO_BODYPART | ERR_INVALID_ARGS;
+
+/**
+ * An `Action` which moves along a path to a given location.
+ */
+declare interface MoveTo extends Action {
+  readonly action: 1;
+  execute: (creep: CreepExt) => MoveResult;
+}
+
+declare interface ActionsExport {
   /**
-   * Returns an Idle Action.
+   * Returns a `MoveTo` action for sending `creep` to `dest`.
    */
-  idle: () => ActionIdle,
-  /**
-   * Executes the `action` on `creep`.
-   * 
-   * @param creep The [CreepExt] to execute `action` on.
-   * @param action The [Action] to execute on `creep`.
-   * 
-   * @returns The result of `action`s execution.
-   */
-  execute: (creep: CreepExt, action: Action) => Result<null, number>,
-  /**
-   * Executes the next [Action] pending on `creep`.
-   * 
-   * Defaults to an Idle action if no Actions are pending.
-   * 
-   * @param creep The creep to execute the actions of.
-   * 
-   * @returns The result of the [Action]s execution.
-   */
-  execute_creep: (creep: CreepExt) => Result<null, number>,
+  move_to: (creep: CreepExt) => (dest: RoomPosition) => ConsList<MoveTo>;
 }
